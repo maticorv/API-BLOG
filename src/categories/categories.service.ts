@@ -1,26 +1,61 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import Category from './entities/category.entity';
 
 @Injectable()
 export class CategoriesService {
-  create(createCategoryDto: CreateCategoryDto) {
-    return 'This action adds a new category';
+  constructor(
+    @InjectRepository(Category)
+    private categoryRepository: Repository<Category>,
+  ) {}
+
+  async create(createCategoryDto: CreateCategoryDto) {
+    const newCategory = await this.categoryRepository.create(createCategoryDto);
+    await this.categoryRepository.save(newCategory);
+    return newCategory;
   }
 
-  findAll() {
-    return `This action returns all categories`;
+  async findAll() {
+    const posts = await this.categoryRepository.find({
+      order: { id: 'ASC' },
+    });
+    return posts;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
+  async findOne(id: number) {
+    const post = await this.categoryRepository.findOne({
+      where: { id: id },
+    });
+    if (post) {
+      return post;
+    }
+    throw new NotFoundException(`Category with this id: ${id} does not exist`);
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  async update(id: number, updateCategoryDto: UpdateCategoryDto) {
+    const post = await this.categoryRepository.findOne(id);
+    if (!post) {
+      throw new NotFoundException(
+        `Category with this id: ${id} does not exist`,
+      );
+    }
+    post.name = updateCategoryDto.name;
+
+    const updatedCategory = await this.categoryRepository.save(post);
+
+    return updatedCategory;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  async remove(id: number) {
+    const deleteResponse = await this.categoryRepository.softDelete(id);
+    if (!deleteResponse.affected) {
+      throw new NotFoundException(
+        `Category with this id: ${id} does not exist`,
+      );
+    }
+    return;
   }
 }
