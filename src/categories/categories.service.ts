@@ -21,6 +21,7 @@ export class CategoriesService {
   async findAll() {
     const posts = await this.categoryRepository.find({
       order: { id: 'ASC' },
+      relations: ['posts']
     });
     return posts;
   }
@@ -28,6 +29,7 @@ export class CategoriesService {
   async findOne(id: number) {
     const post = await this.categoryRepository.findOne({
       where: { id: id },
+      relations: ['posts'],
     });
     if (post) {
       return post;
@@ -36,7 +38,9 @@ export class CategoriesService {
   }
 
   async update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    const post = await this.categoryRepository.findOne(id);
+    const post = await this.categoryRepository.findOne(id, {
+      relations: ['posts'],
+    });
     if (!post) {
       throw new NotFoundException(
         `Category with this id: ${id} does not exist`,

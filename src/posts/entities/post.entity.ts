@@ -1,3 +1,4 @@
+import Category from 'src/categories/entities/category.entity';
 import User from 'src/users/entities/user.entity';
 import {
   PrimaryGeneratedColumn,
@@ -8,6 +9,8 @@ import {
   Entity,
   ManyToOne,
   DeleteDateColumn,
+  JoinTable,
+  ManyToMany,
 } from 'typeorm';
 
 @Entity()
@@ -32,5 +35,9 @@ export class Post {
  
   @ManyToOne(() => User, (author: User) => author.posts)
   public author: User;
+
+  @ManyToMany(() => Category, (category: Category) => category.posts)
+  @JoinTable()
+  public categories: Category[];
 }
 export default Post;
