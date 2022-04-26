@@ -19,7 +19,7 @@ export class PostsService {
   }
 
   async findAll() {
-    const posts = await this.postRepository.findAndCount({
+    const posts = await this.postRepository.find({
       order: { id: 'ASC' },
     });
     return posts;
