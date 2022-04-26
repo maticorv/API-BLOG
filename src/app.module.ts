@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
+import { PostsModule } from './posts/posts.module';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { DatabaseModule } from './database/database.module';
         PORT: Joi.number() || process.env.PORT,
       })
     }),
-    DatabaseModule
+    DatabaseModule,
+    PostsModule
   ],
   controllers: [AppController],
   providers: [AppService],
