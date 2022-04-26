@@ -2,11 +2,13 @@ import {
   Column,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
+import Post from 'src/posts/entities/post.entity';
 
 @Entity()
 class User {
@@ -43,6 +45,9 @@ class User {
 
   @Column({ default: false })
   public isEmailConfirmed: boolean;
+
+  @OneToMany(() => Post, (post: Post) => post.author)
+  public posts: Post[];
 }
 
 export default User;

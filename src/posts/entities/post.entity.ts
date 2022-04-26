@@ -1,3 +1,4 @@
+import User from 'src/users/entities/user.entity';
 import {
   PrimaryGeneratedColumn,
   Column,
@@ -28,5 +29,8 @@ export class Post {
 
   @UpdateDateColumn({ type: 'timestamp', name: 'updated_at' })
   updatedAt: Date;
+ 
+  @ManyToOne(() => User, (author: User) => author.posts)
+  public author: User;
 }
 export default Post;
