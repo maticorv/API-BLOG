@@ -10,12 +10,13 @@ import { DatabaseModule } from './database/database.module';
     ConfigModule.forRoot({
       envFilePath: [`stage.${process.env.NODE_ENV}.env`],
       validationSchema: Joi.object({
-        POSTGRES_HOST: Joi.string().required(),
-        POSTGRES_PORT: Joi.number().required(),
-        POSTGRES_USER: Joi.string().required(),
-        POSTGRES_PASSWORD: Joi.string().required(),
-        POSTGRES_DB: Joi.string().required(),
-        PORT: Joi.number(),
+        POSTGRES_HOST: Joi.string().required() || process.env.POSTGRES_HOST,
+        POSTGRES_PORT: Joi.number().required() || process.env.POSTGRES_PORT,
+        POSTGRES_USER: Joi.string().required() || process.env.POSTGRES_USER,
+        POSTGRES_PASSWORD:
+          Joi.string().required() || process.env.POSTGRES_PASSWORD,
+        POSTGRES_DB: Joi.string().required() || process.env.POSTGRES_DB,
+        PORT: Joi.number() || process.env.PORT,
       })
     }),
     DatabaseModule
