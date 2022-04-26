@@ -3,8 +3,9 @@ export class CreatePostDto {
   @IsNotEmpty()
   @IsString()
   title: string;
-
+  
   @IsArray()
   @ArrayNotEmpty()
+  @IsString({ each: true })
   paragraphs: string[];
 }
