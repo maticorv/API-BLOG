@@ -10,6 +10,7 @@ import { HealthModule } from './health/health.module';
 import { AuthModule } from './auth/auth.module';
 import { CategoriesModule } from './categories/categories.module';
 import { EmailsModule } from './emails/emails.module';
+import { EmailConfirmationsModule } from './email-confirmations/email-confirmations.module';
 
 @Module({
   imports: [
@@ -31,7 +32,8 @@ import { EmailsModule } from './emails/emails.module';
     HealthModule,
     AuthModule,
     CategoriesModule,
-    EmailsModule
+    EmailsModule,
+    EmailConfirmationsModule
   ],
   controllers: [AppController],
   providers: [AppService],
