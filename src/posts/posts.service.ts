@@ -21,12 +21,16 @@ export class PostsService {
   async findAll() {
     const posts = await this.postRepository.find({
       order: { id: 'ASC' },
+      relations: ['author']
     });
     return posts;
   }
 
   async findOne(id: number) {
-    const post = await this.postRepository.findOne({ id });
+    const post = await this.postRepository.findOne({
+      where: { id: id },
+      relations: ['author'],
+    });
     if (post) {
       return post;
     }
