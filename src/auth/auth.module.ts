@@ -9,6 +9,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { EmailsModule } from 'src/emails/emails.module';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
     }),
     PassportModule,
     ConfigModule,
-    // EmailsModule,
+    EmailsModule,
     // EmailConfirmationModule
   ],
   controllers: [AuthController],

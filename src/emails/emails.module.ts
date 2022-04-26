@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config';
 
 @Module({
   controllers: [EmailsController],
-  providers: [EmailsService, ConfigService]
+  providers: [EmailsService, ConfigService],
+  exports: [EmailsService],
 })
 export class EmailsModule {}

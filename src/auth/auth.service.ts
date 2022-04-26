@@ -11,12 +11,14 @@ import * as bcrypt from 'bcrypt';
 import { LoginAuthDto } from './dto/login-auth.dto';
 import { TokenPayloadDto } from './dto/token-payload.dto';
 import { JwtService } from '@nestjs/jwt';
+import { EmailsService } from 'src/emails/emails.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
-    private jwtService: JwtService,  // private readonly emailsConfirmationService: EmailConfirmationsService, // private readonly emailsService: EmailsService, // private jwtService: JwtService,
+    private readonly emailsService: EmailsService,
+    private jwtService: JwtService, // private readonly emailsConfirmationService: EmailConfirmationsService, // private readonly emailsService: EmailsService, // private jwtService: JwtService,
   ) {}
 
   async signUp(createAuthDto: CreateAuthDto): Promise<User> {
@@ -74,11 +76,11 @@ export class AuthService {
         Thanks,
         The FinancialEmpire Team
         `;
-        //   this.emailsService.sendMail({
-        //     to: email,
-        //     subject: 'Nuevo inicio de sesión',
-        //     text,
-        //   });
+        this.emailsService.sendMail({
+          to: email,
+          subject: 'Nuevo inicio de sesión',
+          text,
+        });
       }
       return {
         user: user,
