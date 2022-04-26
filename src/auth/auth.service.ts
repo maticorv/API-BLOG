@@ -51,7 +51,7 @@ export class AuthService {
   ): Promise<{ access_token: string; user: any }> {
     try {
       const { email, password } = loginAuthDto;
-      const user = await this.usersService.getByEmail(email);
+      const user = await this.usersService.getByEmailAndConfirm(email);
       await this.verifyPassword(password, user.password);
       user.password = undefined;
       const payload: TokenPayloadDto = { email };

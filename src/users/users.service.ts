@@ -68,6 +68,15 @@ export class UsersService {
     }
     throw new NotFoundException(`User with this email:${email} does not exist`);
   }
+  async getByEmailAndConfirm(email: string) {
+    const user = await this.userRepository.findOne({
+      where: { email, confirmEmail: true },
+    });
+    if (user) {
+      return user;
+    }
+    throw new NotFoundException(`User with this email:${email} does not exist`);
+  }
 
   async updateIp(email: string, ip: string) {
     return this.userRepository.update(
