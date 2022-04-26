@@ -1,34 +1,60 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { EmailConfirmationsService } from './email-confirmations.service';
-import { CreateEmailConfirmationDto } from './dto/create-email-confirmation.dto';
-import { UpdateEmailConfirmationDto } from './dto/update-email-confirmation.dto';
+import { GetUser } from 'src/shared/decorators/get-user.decorator';
+import User from 'src/users/entities/user.entity';
 
 @Controller('email-confirmations')
 export class EmailConfirmationsController {
-  constructor(private readonly emailConfirmationsService: EmailConfirmationsService) {}
+  constructor(
+    private readonly emailConfirmationsService: EmailConfirmationsService,
+  ) {}
 
-  @Post()
-  create(@Body() createEmailConfirmationDto: CreateEmailConfirmationDto) {
-    return this.emailConfirmationsService.create(createEmailConfirmationDto);
+  @Get('confirm')
+  async create(@Query() query) {
+    const email = await this.emailConfirmationsService.decodeConfirmationToken(
+      query,
+    );
+    await this.emailConfirmationsService.confirmEmail(email);
+    // retornar redireccion a email ha sido confirmado
   }
 
-  @Get()
-  findAll() {
-    return this.emailConfirmationsService.findAll();
+  @Post('resend-confirmation-link')
+  async resendConfirmationLink(@GetUser() user: User) {
+    await this.emailConfirmationsService.resendConfirmationLink(user);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.emailConfirmationsService.findOne(+id);
-  }
+  // @Get()
+  // findAll() {
+  //   return this.emailConfirmationsService.findAll();
+  // }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEmailConfirmationDto: UpdateEmailConfirmationDto) {
-    return this.emailConfirmationsService.update(+id, updateEmailConfirmationDto);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.emailConfirmationsService.findOne(+id);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.emailConfirmationsService.remove(+id);
-  }
+  // @Patch(':id')
+  // update(
+  //   @Param('id') id: string,
+  //   @Body() updateEmailConfirmationDto: UpdateEmailConfirmationDto,
+  // ) {
+  //   return this.emailConfirmationsService.update(
+  //     +id,
+  //     updateEmailConfirmationDto,
+  //   );
+  // }
+
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.emailConfirmationsService.remove(+id);
+  // }
 }
