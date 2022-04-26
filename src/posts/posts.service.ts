@@ -20,7 +20,6 @@ export class PostsService {
 
   async findAll() {
     const posts = await this.postRepository.findAndCount({
-      where: { active: true },
       order: { id: 'ASC' },
     });
     return posts;
@@ -35,9 +34,7 @@ export class PostsService {
   }
 
   async update(id: number, updatePostDto: UpdatePostDto) {
-    const post = await this.postRepository.findOne(id, {
-      where: { active: true },
-    });
+    const post = await this.postRepository.findOne(id);
     if (!post) {
       throw new NotFoundException(`Post with this id: ${id} does not exist`);
     }
