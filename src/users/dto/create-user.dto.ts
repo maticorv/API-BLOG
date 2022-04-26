@@ -6,7 +6,6 @@ import {
   MinLength,
   MaxLength,
   Matches,
-  IsNumberString,
 } from 'class-validator';
 
 export class CreateUserDto {
@@ -30,11 +29,6 @@ export class CreateUserDto {
     message: 'password is too weak',
   })
   password: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsNumberString()
-  phone: string;
 }
 
 export default CreateUserDto;
