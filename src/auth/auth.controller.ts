@@ -5,6 +5,7 @@ import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { LoginAuthDto } from './dto/login-auth.dto';
 import { RealIP } from 'nestjs-real-ip';
+import { Public } from 'src/shared/decorators/public.decorator';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -12,12 +13,14 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('/signUp')
+  @Public()
   @ApiBody({ type: CreateAuthDto })
   signUp(@Body() createAuthDto: CreateAuthDto): Promise<User> {
     return this.authService.signUp(createAuthDto);
   }
 
   @Post('/signIn')
+  @Public()
   signIn(
     @Body() loginAuthDto: LoginAuthDto,
     @RealIP() ip: string,
