@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  CacheInterceptor,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { CategoriesService } from './categories.service';
@@ -24,6 +26,7 @@ export class CategoriesController {
   }
 
   @Get()
+  @UseInterceptors(CacheInterceptor)
   findAll() {
     return this.categoriesService.findAll();
   }
