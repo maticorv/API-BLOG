@@ -3,6 +3,8 @@ import { ApiBody, ApiTags } from '@nestjs/swagger';
 import User from 'src/users/entities/user.entity';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
+import { LoginAuthDto } from './dto/login-auth.dto';
+import { RealIP } from 'nestjs-real-ip';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -13,6 +15,14 @@ export class AuthController {
   @ApiBody({ type: CreateAuthDto })
   signUp(@Body() createAuthDto: CreateAuthDto): Promise<User> {
     return this.authService.signUp(createAuthDto);
+  }
+
+  @Post('/signIn')
+  signIn(
+    @Body() loginAuthDto: LoginAuthDto,
+    @RealIP() ip: string,
+  ): Promise<{ access_token: string }> {
+    return this.authService.signIn(loginAuthDto, ip);
   }
 
   // @Post()

@@ -26,6 +26,9 @@ class User {
   @Column({ nullable: true })
   public phone?: string;
 
+  @Column({ nullable: true })
+  public ip?: string;
+
   //   @OneToMany(() => Post, (post: Post) => post.author)
   //   public posts?: Post[];
 

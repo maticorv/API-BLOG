@@ -59,4 +59,22 @@ export class UsersService {
     }
     return;
   }
+  async getByEmail(email: string) {
+    const user = await this.userRepository.findOne({
+      where: { email },
+    });
+    if (user) {
+      return user;
+    }
+    throw new NotFoundException(`User with this email:${email} does not exist`);
+  }
+
+  async updateIp(email: string, ip: string) {
+    return this.userRepository.update(
+      { email },
+      {
+        ip: ip,
+      },
+    );
+  }
 }
