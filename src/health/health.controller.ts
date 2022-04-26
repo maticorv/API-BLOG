@@ -15,6 +15,7 @@ import {
   MemoryHealthIndicator,
   TypeOrmHealthIndicator,
 } from '@nestjs/terminus';
+import { Public } from 'src/shared/decorators/public.decorator';
 
 @Controller('health')
 @ApiTags('health')
@@ -32,6 +33,7 @@ export class HealthController {
   // }
 
   @Get()
+  @Public()
   @HealthCheck()
   check() {
     return this.healthService.check([
@@ -43,11 +45,11 @@ export class HealthController {
       () =>
         this.memoryHealthIndicator.checkRSS('memory RSS', 300 * 1024 * 1024),
       // the used disk storage should not exceed the 50% of the available space
-      () =>
-        this.diskHealthIndicator.checkStorage('disk health', {
-          thresholdPercent: 0.5,
-          path: '/',
-        }),
+      // () =>
+      //   this.diskHealthIndicator.checkStorage('disk health', {
+      //     thresholdPercent: 0.5,
+      //     path: '/',
+      //   }),
     ]);
   }
 
