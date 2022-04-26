@@ -10,15 +10,12 @@ export class EmailsService {
   nodemailerTransport: Mail;
   constructor(private readonly configService: ConfigService) {
     this.nodemailerTransport = createTransport({
-      host: this.configService.get('EMAIL_SERVICE'),
-      port: this.configService.get('EMAIL_PORT'),
-      secure: this.configService.get('EMAIL_SECURE'),
-      // logger: true,
-      // debug: true,
+      service: 'gmail',
+      host: 'smtp.gmail.com',
       auth: {
         user: this.configService.get('EMAIL_USER'),
-        pass: this.configService.get('EMAIL_PASSWORD'),
-      },
+        pass: this.configService.get('EMAIL_PASS'),
+      }
     });
   }
   create(createEmailDto: CreateEmailDto) {
