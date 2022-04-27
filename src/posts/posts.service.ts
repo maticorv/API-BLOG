@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Post } from './entities/post.entity';
@@ -18,12 +18,33 @@ export class PostsService {
     return newPost;
   }
 
-  async findAll() {
+  async findAll(offset = 0, limit = 10) {
     const posts = await this.postRepository.find({
       order: { id: 'ASC' },
-      relations: ['author']
+      relations: ['author'],
+      skip: offset,
+      take: limit,
     });
     return posts;
+  }
+
+  async searchForPosts(
+    text: string,
+    offset?: number,
+    limit?: number,
+    startId?: number,
+  ) {
+    const [items, count] = await this.postRepository.findAndCount({
+      order: { id: 'ASC' },
+      where: { name: '%' + text + '%' },
+      relations: ['author'],
+      skip: offset,
+      take: limit,
+    });
+    return {
+      items: items,
+      count,
+    };
   }
 
   async findOne(id: number) {
