@@ -70,7 +70,7 @@ export class UsersService {
   }
   async getByEmailAndConfirm(email: string) {
     const user = await this.userRepository.findOne({
-      where: { email, confirmEmail: true },
+      where: { email, isEmailConfirmed: true },
     });
     if (user) {
       return user;
