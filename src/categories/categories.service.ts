@@ -7,6 +7,9 @@ import Category from './entities/category.entity';
 
 @Injectable()
 export class CategoriesService {
+  /**
+   * @ignore
+   */
   constructor(
     @InjectRepository(Category)
     private categoryRepository: Repository<Category>,
@@ -17,11 +20,14 @@ export class CategoriesService {
     await this.categoryRepository.save(newCategory);
     return newCategory;
   }
-
-  async findAll() {
+  /**
+   * A method that fetches the categories from the database
+   * @returns A promise with the list of categories
+   */
+  async findAll(): Promise<Category[]> {
     const posts = await this.categoryRepository.find({
       order: { id: 'ASC' },
-      relations: ['posts']
+      relations: ['posts'],
     });
     return posts;
   }
@@ -52,7 +58,10 @@ export class CategoriesService {
 
     return updatedCategory;
   }
-
+  /**
+   * A method that deletes a category from the database
+   * @param id An id of a category. A category with this id should exist in the database
+   */
   async remove(id: number) {
     const deleteResponse = await this.categoryRepository.softDelete(id);
     if (!deleteResponse.affected) {

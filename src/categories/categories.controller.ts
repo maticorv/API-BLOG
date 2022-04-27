@@ -13,6 +13,7 @@ import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import Category from './entities/category.entity';
 
 @Controller('categories')
 @ApiTags('categories')
@@ -25,9 +26,13 @@ export class CategoriesController {
     return this.categoriesService.create(createCategoryDto);
   }
 
+  /**
+   * A method that fetches the categories from the database
+   * @returns A promise with the list of categories
+   */
   @Get()
   @UseInterceptors(CacheInterceptor)
-  findAll() {
+  findAll(): Promise<Category[]> {
     return this.categoriesService.findAll();
   }
 
