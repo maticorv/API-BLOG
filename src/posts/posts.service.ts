@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import User from 'src/users/entities/user.entity';
 import { In, Repository } from 'typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -12,7 +13,8 @@ export class PostsService {
     private postRepository: Repository<Post>,
   ) {}
 
-  async create(createPostDto: CreatePostDto) {
+  async create(createPostDto: CreatePostDto, user: User) {
+    createPostDto.author = user;
     const newPost = await this.postRepository.create(createPostDto);
     await this.postRepository.save(newPost);
     return newPost;
@@ -36,7 +38,8 @@ export class PostsService {
   ) {
     const [items, count] = await this.postRepository.findAndCount({
       order: { id: 'ASC' },
-      where: { name: '%' + text + '%' },
+      // where: { title: `%${text}%` },
+      where: `(title like '%${text}%')`,
       relations: ['author'],
       skip: offset,
       take: limit,

@@ -13,6 +13,7 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { PaginationParams } from 'src/shared/utilities/paginationParams';
+import { GetUser } from 'src/shared/decorators/get-user.decorator';
 
 @Controller('posts')
 @ApiTags('posts')
@@ -21,8 +22,8 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Post()
-  create(@Body() createPostDto: CreatePostDto) {
-    return this.postsService.create(createPostDto);
+  create(@GetUser() user, @Body() createPostDto: CreatePostDto) {
+    return this.postsService.create(createPostDto, user);
   }
 
   @Get()
